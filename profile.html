@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextGen IT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+       :root {
+            --primary-color: #6C63FF;
+            --accent-color: #4E4E50;
+            --bg-color: #F8F9FA;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        button a{
+            text-decoration: none;  
+            font-weight: bold;
+            color: rgb(243, 235, 235);
+        }
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 10px;
+            text-align: center;
+        }
+
+        header h1 a {
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        main {
+            padding: 40px 20px;
+            text-align: center;
+        }
+        header h1 a{
+            text-decoration: none;  
+            font-weight: bold;
+            color: rgb(255, 253, 253);
+        }
+        footer {
+            margin-top: 50px;
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 50px 0;
+            opacity: 0.9;
+        }
+        footer a{
+            text-decoration: none;
+            color: white;
+        }
+        .profile-page {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+          }
+      
+          .profile-page h2 {
+            text-align: center;
+            color: #2c3e50;
+          }
+      
+          .form-group {
+            margin-bottom: 20px;
+          }
+      
+          label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #333;
+          }
+      
+          input[type="text"],
+          input[type="email"],
+          input[type="file"] {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+          }
+      
+          .profile-picture-preview {
+            display: block;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 10px auto;
+            border: 3px solid #6C63FF ;
+            color: white;
+          }
+          button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #6C63FF, #8A79FF);
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+             transition: transform 0.3s, box-shadow 0.3s;
+             font-weight: bold;
+          }
+      
+          button:hover {
+            background-color: blueviolet;
+             transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">NextGen IT</a></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="search.html">Search</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="profile-page">
+            <h2>My profile</h2>
+            <form  id="ProfForm"action="/save-profile" method="POST" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="name">Nume:</label>
+                <input type="text" id="name" name="name" placeholder="ex: John Miller" required>
+              </div>
+        
+              <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="email@example.com" required>
+              </div>
+        
+              <div class="form-group">
+                <label for="profile-picture">Profile picture:</label>
+                <input type="file" id="profile-picture" name="profile_picture" accept="image/*">
+                <img src="https://via.placeholder.com/150" alt="Preview poza" class="profile-picture-preview" id="preview">
+              </div>
+        
+              <button type="submit" onclick="saveFile()">Save Profile</button>
+            </form>
+          </div>
+          <script>
+            const fileInput = document.getElementById('profile-picture');
+            const preview = document.getElementById('preview');
+            
+            fileInput.addEventListener('change', function () {
+              const file = this.files[0];
+              if (file) {
+                preview.src = URL.createObjectURL(file);
+              }
+            });
+            let profiles = JSON.parse(localStorage.getItem('profiles')) || [];
+            const form = document.getElementById('ProfForm');
+            form.addEventListener('submit', function(event) {
+              event.preventDefault();
+            
+              const name = document.getElementById('name').value;
+              const email = document.getElementById('email').value;
+              
+              profiles.push(`Name: ${name}\nEmail: ${email}\n----------------\n`);
+
+
+              localStorage.setItem('profiles', JSON.stringify(profiles));
+
+          // Combine all profiles into one text content
+              const profileData = profiles.join('\n');
+
+
+              const blob = new Blob([profileData], { type: 'text/plain'
+          });
+
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'user_profiles.txt'; // File name
+          link.click();
+
+          window.location.href = "index.html";
+          window.alert("Profile has been saved and the file is updated!");
+
+          form.reset();
+});
+
+            </script>
+           
+    </main>
+    
+    <footer >
+        <div style="margin-bottom: 10px;">
+            <a href="https://www.facebook.com/profile.php?id=100077259397224" target="_blank">Facebook</a> |
+            <a href="https://www.linkedin.com/in/george-marian-târnăcop-57573828b/" target="_blank">LinkedIn</a> |
+            <a href="https://www.instagram.com/george_zis_jojo/" target="_blank">Instagram</a>
+        </div>
+          Email: contact@nextgenit.ro | Telefon: +40 712 345 678
+        <p>&copy; <span id="year"></span> NextGen IT. Toate drepturile rezervate.</p>
+
+        <script>
+            document.getElementById("year").textContent = new Date().getFullYear();
+        </script>
+    </footer>
+</body>
+</html>

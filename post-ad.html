@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postează un anunț</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+        :root {
+            --primary-color: #6C63FF;
+            --accent-color: #4E4E50;
+            --bg-color: #F8F9FA;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        button a{
+            text-decoration: none;  
+            font-weight: bold;
+            color: rgb(243, 235, 235);
+        }
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 10px;
+            text-align: center;
+        }
+
+        header h1 a {
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        form {
+          background: white;
+          padding: 20px;
+          border-radius: 20px;
+          max-width: 500px;
+          margin: auto;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, textarea {
+          width: 95%;
+          margin-bottom: 15px;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 235px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: bold;
+
+        }
+
+        button:hover {
+            
+             transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        footer {
+            margin-top: 120px;
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 50px 0;
+            opacity: 0.9;
+        }
+        footer a{
+            text-decoration: none;
+            color: white;
+        }
+  </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">NextGen IT</a></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="search.html">Search</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                
+            </ul>
+        </nav>
+    </header>
+  <h2 style="text-align: center;">Post an ad</h2>
+  <form id="adForm">
+    <label for="nume">Nume:</label>
+    <input type="text" id="nume" name="nume" required>
+    
+    <label for="price">Price($):</label>
+    <input type="number" id="price" name="price" required>
+
+    <label for="caracteristici">Specifications:</label>
+    <textarea id="caracteristici" name="caracteristici" rows="4" required></textarea>
+
+    <label for="imagine">Image:</label>
+    <input type="file" id="imagine" name="imagine" accept="image/*">
+
+    <button type="submit">Post</button>
+  </form>
+
+  <script>
+    let ads = JSON.parse(localStorage.getItem('ads')) || [];
+
+    const form = document.getElementById('adForm');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // Oprește trimiterea clasică
+    
+      const nume = document.getElementById('nume').value;
+      const price = document.getElementById('price').value;
+      const caracteristici = document.getElementById('caracteristici').value;
+      ads.push(`Name: ${name}\nPrice: ${price}\nSpecifications: ${caracteristici}\n----------------\n`);
+      localStorage.setItem('ads', JSON.stringify(ads));
+      const adsData = ads.join('\n');
+
+
+      const blob = new Blob([adsData], { type: 'text/plain'
+          });
+
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'add_ads.txt'; // File name
+          link.click();
+
+          window.location.href = "index.html";
+          window.alert("Profile has been saved and the file is updated!");
+
+          form.reset();
+     });
+      
+      
+    </script>
+  <footer >
+        <div style="margin-bottom: 10px;">
+            <a href="https://www.facebook.com/profile.php?id=100077259397224" target="_blank">Facebook</a> |
+            <a href="https://www.linkedin.com/in/george-marian-târnăcop-57573828b/" target="_blank">LinkedIn</a> |
+            <a href="https://www.instagram.com/george_zis_jojo/" target="_blank">Instagram</a>
+        </div>
+          Email: contact@nextgenit.ro | Telefon: +40 712 345 678
+        <p>&copy; <span id="year"></span> NextGen IT. Toate drepturile rezervate.</p>
+
+        <script>
+            document.getElementById("year").textContent = new Date().getFullYear();
+        </script>
+    </footer>
+</body>
+</html>
